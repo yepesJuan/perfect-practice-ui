@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider } from "@emotion/react";
+import { createTheme, CssBaseline } from "@mui/material";
+import { initializeApp } from 'firebase/app'
+import "./App.css";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBvMe4gWfCMokPrEcrUuAogC3Lvkfea3zg",
+  authDomain: "perfect-practice-ui.firebaseapp.com",
+  projectId: "perfect-practice-ui",
+  storageBucket: "perfect-practice-ui.appspot.com",
+  messagingSenderId: "172218651110",
+  appId: "1:172218651110:web:b9545c762b7737e4d24627",
+  measurementId: "G-CT52S924JS"
+}
+
+const app = initializeApp(firebaseConfig)
 
 function App() {
+  const theme = createTheme({
+    palette: { primary: { main: "#272262" }, secondary:{main:"#ff216e"} },
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+    </ThemeProvider>
+  )
 }
 
 export default App;
