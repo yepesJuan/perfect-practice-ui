@@ -1,129 +1,143 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import MonacoEditor from '../components/CodeEditor';
 import ReactMarkdown from 'react-markdown';
+import Editor from '@monaco-editor/react';
+import {
+  getQuestion,
+  getQuestions,
+  Question,
+  QuestionResponse,
+  submitQuestion,
+} from '../services/question';
+import { useNavigate, useParams } from 'react-router';
+import { UserContext } from '../context/UserContext';
+import { Button } from '@mui/material';
 
-
-const markdownName = `Challenge: **Two Sum**`
-
-const markdownDescription = `
-Given an array of integers \`nums\` and an integer \`target\`, return _indices of the two numbers such that they add up to \`target\`_. \n\n You may assume that each input would have **_exactly_ one solution**, and you may not use the _same_ element twice. \n\n You can return the answer in any order. \n\n\n **Example 1:** \n\n
-
-\n**Input:** nums = [2,7,11,15], target = 9\n**Output:** [0,1]\n**Output:** Because nums[0] + nums[1] == 9, we return [0, 1].\n
-
-\n\n **Example 2:** \n\n
-
-\n**Input:** nums = [3,2,4], target = 6\n**Output:** [1,2]\n
-
-\n\n **Example 3:** \n\n
-
-\n**Input:** nums = [3,3], target = 6\n**Output:** [0,1]\n
-
-`
-
-const drawerWidth = '40%';
-const drawerHeight = '100%';
-
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
+interface SubmissionResponse {
+  status: 'passed' | 'failed';
+  inputs: any[];
+  expected: any;
+  actual: any;
 }
 
-export default function CodeChallenge(props: Props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+export default function CodeChallenge() {
+  const editorRef = useRef<any>(null);
+  const [question, setQuestion] = useState<Question>();
+  const [response, setResponse] = useState<SubmissionResponse>();
+  const { user } = useContext(UserContext);
+  const params = useParams();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (params.questionId && user) {
+      user
+        .getIdToken()
+        .then((jwt) => getQuestion(jwt, params.questionId!))
+        .then(setQuestion);
+    } else {
+      navigate('/');
+    }
+  }, [, params]);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const submit = () => {
+    user!
+      .getIdToken()
+      .then((jwt) =>
+        submitQuestion(jwt, params.questionId!, editorRef?.current!.getValue())
+      )
+      .then((questionResponse) => {
+        const failure = questionResponse.testedCases.find(
+          (t) => t.status === 'failed'
+        );
+        if (!failure) {
+          const success = questionResponse.testedCases.pop();
+          setResponse({
+            actual: success?.actual,
+            expected: success?.expected,
+            inputs: success?.inputs as any[],
+            status: 'passed',
+          });
+        } else {
+          setResponse({
+            actual: failure?.actual,
+            expected: failure?.expected,
+            inputs: failure?.inputs as any[],
+            status: 'failed',
+          });
+        }
+      });
   };
 
-  const drawer = (
-    <div style={{ paddingLeft: '2em', paddingRight: '2em'}}>
-      <Toolbar />
-      <Divider />
-        <ReactMarkdown children={markdownName} />
-       <Divider />
-        <ReactMarkdown children={markdownDescription} />
-       <Divider />
+  const handleEditorDidMount = (editor: any) => {
+    editorRef.current = editor;
+  };
 
-    </div>
-  );
-
-  const container = window !== undefined ? () => window().document.body : undefined;
-
+  if (!question) {
+    return <>...loading</>;
+  }
+  //
   return (
-    <Box sx={{ display: 'flex', height: '800px' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Week 1 Day 1
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+      }}
+    >
+      <div style={{ width: '50%', borderRight: '1px solid black' }}>
+        <div
+          style={{ paddingLeft: '2em', paddingRight: '2em', marginTop: '1em' }}
+        >
+          <Typography variant="h4" noWrap component="div">
+            Question {question?.title}
           </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          <Divider />
+          <ReactMarkdown children={question?.description || ''} />
+          <Divider />
+          {response && (
+            <div>
+              <h3>Submitted Answer Response</h3>
+              <p
+                style={{
+                  color: response.status === 'failed' ? 'red' : 'green',
+                  textTransform: 'capitalize',
+                }}
+              >
+                Status: {response.status}
+              </p>
+              <p>Inputs: {response.inputs.join(', ')}</p>
+              <p>Expected: {response.expected}</p>
+              <p>Actual: {response.actual || 'undefined'}</p>
+            </div>
+          )}
+        </div>
+      </div>
+      <div style={{ width: '50%', height: '100vh' }}>
+        <div
+          style={{
+            height: '50px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-evenly',
+            padding: '0 25px',
           }}
         >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` }, height: drawerHeight }}
-      >
-        <Toolbar />
-          <MonacoEditor />
-      </Box>
-    </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ width: '125px' }}
+            onClick={() => submit()}
+          >
+            Submit
+          </Button>
+        </div>
+        <Editor
+          defaultLanguage="javascript"
+          defaultValue={question?.initialCode || ''}
+          onMount={handleEditorDidMount}
+        />
+      </div>
+    </div>
   );
 }

@@ -1,14 +1,14 @@
-import { Button } from "@mui/material";
-import { getAuth, signInWithPopup, GithubAuthProvider } from "firebase/auth";
-import { useContext, useEffect } from "react";
-import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import { margin, padding } from "@mui/system";
+import { Button } from '@mui/material';
+import { getAuth, signInWithPopup, GithubAuthProvider } from 'firebase/auth';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { margin, padding } from '@mui/system';
 
 const provider = new GithubAuthProvider();
 
@@ -42,49 +42,53 @@ export const Login = () => {
   useEffect(() => {
     console.log(user);
     if (user) {
-      navigate("/courseprogress");
+      navigate('/');
     }
   }, [, user]);
 
   return (
     <div
       style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#272262",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#272262',
+        height: '100vh',
       }}
     >
       <Card
         style={{
-          width: "560px",
-          height: "160px",
-          backgroundColor: "white",
-          margin: "25% auto",
-          borderRadius: "16px",
+          padding: '75px',
+          backgroundColor: 'white',
+          margin: '10% auto',
+          borderRadius: '16px',
         }}
       >
         <CardContent>
           <Typography
             gutterBottom
-            variant="h5"
+            variant="h3"
             component="div"
             color="#202020"
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
           >
-            Students Welcome to Perfect Practice
+            Welcome to Perfect Practice
           </Typography>
         </CardContent>
         <CardActions
-          style={{ display: "flex", justifyContent: "space-around" }}
+          style={{ display: 'flex', justifyContent: 'space-around' }}
         >
           <Button
             variant="contained"
             color="secondary"
             onClick={handleLogin}
-            style={{ borderRadius: "8px" }}
+            style={{
+              fontSize: '1.5em',
+              padding: '25px',
+            }}
           >
-            <GitHubIcon style={{ marginRight: "10px" }} /> Sign in with Github
+            <GitHubIcon style={{ marginRight: '10px', fontSize: '1.5em' }} />{' '}
+            Sign in with Github
           </Button>
         </CardActions>
       </Card>

@@ -3,9 +3,11 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useEffect,
   useState,
-} from "react";
-import { getAuth, User, onAuthStateChanged } from "firebase/auth";
+} from 'react';
+import { getAuth, User, onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router';
 
 interface UserContextT {
   user?: User;
@@ -21,6 +23,8 @@ export const UserContextProvider = (props: {
   const [user, setUser] = useState<User>(auth.currentUser!);
   const value = { user, setUser } as UserContextT;
   const { Provider } = UserContext;
-  onAuthStateChanged(auth, (u) => setUser(u!));
+  onAuthStateChanged(auth, (u) => {
+    setUser(u!);
+  });
   return <Provider value={value}>{props.children}</Provider>;
 };
