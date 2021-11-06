@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
 import { getAuth, signInWithPopup, GithubAuthProvider } from "firebase/auth";
-
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const provider = new GithubAuthProvider();
 
@@ -8,19 +10,23 @@ const provider = new GithubAuthProvider();
 //   'allow_signup': 'false'
 // });
 
-const handleLogin = () => {
-  const auth = getAuth();
+export const Login = () => {
+  const { user, setUser } = useContext(UserContext);
+  let navigate = useNavigate()
+  const handleLogin = () => {
+    const auth = getAuth();
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
         const credential = GithubAuthProvider.credentialFromResult(result);
         const token = credential!.accessToken;
-    
+
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
+        setUser(result.user);
         // ...
-      }).catch((error) => {
+      })
+      .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -30,11 +36,13 @@ const handleLogin = () => {
         const credential = GithubAuthProvider.credentialFromError(error);
         // ...
       });
-  }
+  };
+  useEffect(() => {
+    console.log(user)
+    if(user) {
+      navigate("/courseprogress")
+    }
+  },[,user])
 
-
-export const Login = () => {
-  return (
-    <Button onClick={handleLogin}>Go to login</Button>
-  )
-}
+  return <Button onClick={handleLogin}>Go to login</Button>;
+};
