@@ -8,6 +8,7 @@ import { ThemeProvider } from "@emotion/react";
 import { createTheme, CssBaseline } from "@mui/material";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
+import CodeChallenge from "./pages/CodeChallenge";
 import "./App.css";
 import { UserContextProvider } from "./context/UserContext";
 
@@ -35,6 +36,7 @@ function App() {
             <Routes>
               <Route path ='/' element={<Home />} /> 
               <Route path ='/login' element={<Login />} /> 
+              <Route path ='/codechallge' element={<CodeChallenge />} /> 
             </Routes>
           </Router>
         </UserContextProvider>
