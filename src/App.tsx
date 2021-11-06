@@ -10,6 +10,7 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import "./App.css";
 import { UserContextProvider } from "./context/UserContext";
+import { CourseProgress } from "./pages/CourseProgress";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBvMe4gWfCMokPrEcrUuAogC3Lvkfea3zg",
@@ -35,6 +36,7 @@ function App() {
             <Routes>
               <Route path ='/' element={<Home />} /> 
               <Route path ='/login' element={<Login />} /> 
+             <Route path ='/courseprogress' element={<CourseProgress/>} />
             </Routes>
           </Router>
         </UserContextProvider>
