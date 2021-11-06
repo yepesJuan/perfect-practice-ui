@@ -61,7 +61,7 @@ export interface RefEditorInstance {
 }
 
 export function MonacoEditor(props: MonacoEditorProps, ref: ((instance: RefEditorInstance) => void) | React.RefObject<RefEditorInstance> | null | undefined) {
-  const { width = '100%', height = '100%', value = '', theme = '', language = 'javascript', autoComplete, options = {}, editorDidMount = noop, onChange = noop, defaultValue = '', ...other } = props;
+  const { width = '100%', height = '100%', value = '', theme = 'vs-dark', language = 'javascript', autoComplete, options = {}, editorDidMount = noop, onChange = noop, defaultValue = '', ...other } = props;
   options.language = language || options.language;
   options.theme = theme || options.theme;
   const [val, setVal] = useState(defaultValue);
