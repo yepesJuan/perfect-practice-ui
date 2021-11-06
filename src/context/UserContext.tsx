@@ -3,7 +3,6 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useEffect,
   useState,
 } from "react";
 import { getAuth, User, onAuthStateChanged } from "firebase/auth";
@@ -19,7 +18,6 @@ export const UserContextProvider = (props: {
   children: ReactNode | ReactNode[];
 }) => {
   const auth = getAuth();
-
   const [user, setUser] = useState<User>(auth.currentUser!);
   const value = { user, setUser } as UserContextT;
   const { Provider } = UserContext;
