@@ -5,16 +5,31 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import MonacoEditor from '../components/CodeEditor';
+import ReactMarkdown from 'react-markdown';
 
 
-const drawerWidth = 240;
+const markdownName = `Challenge: **Two Sum**`
+
+const markdownDescription = `
+Given an array of integers \`nums\` and an integer \`target\`, return _indices of the two numbers such that they add up to \`target\`_. \n\n You may assume that each input would have **_exactly_ one solution**, and you may not use the _same_ element twice. \n\n You can return the answer in any order. \n\n\n **Example 1:** \n\n
+
+\n**Input:** nums = [2,7,11,15], target = 9\n**Output:** [0,1]\n**Output:** Because nums[0] + nums[1] == 9, we return [0, 1].\n
+
+\n\n **Example 2:** \n\n
+
+\n**Input:** nums = [3,2,4], target = 6\n**Output:** [1,2]\n
+
+\n\n **Example 3:** \n\n
+
+\n**Input:** nums = [3,3], target = 6\n**Output:** [0,1]\n
+
+`
+
+const drawerWidth = '40%';
 const drawerHeight = '100%';
 
 interface Props {
@@ -34,34 +49,14 @@ export default function CodeChallenge(props: Props) {
   };
 
   const drawer = (
-    <div>
+    <div style={{ paddingLeft: '2em', paddingRight: '2em'}}>
       <Toolbar />
       <Divider />
-      <List>
-        {['1. Two Sum'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ReactMarkdown children={markdownName} />
        <Divider />
-       <List>
-        {[`Given an array of integers nums and an interger target, return indices of the two numbers such that they add up to target. 
-          You may assume that each input would have exactly one solution, and you may not use the same element twice. 
-          You can return the answer in any order.`].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ReactMarkdown children={markdownDescription} />
        <Divider />
-      </List>
-      </List>
-      <List>
-        {[`Example 1: \n Input: Nums = [2, 7, 11, 15], target = 9 \n Output: [0,1]`].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
+
     </div>
   );
 
@@ -80,7 +75,6 @@ export default function CodeChallenge(props: Props) {
         <Toolbar>
           <IconButton
             color="inherit"
-            aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
@@ -95,7 +89,6 @@ export default function CodeChallenge(props: Props) {
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
