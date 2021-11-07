@@ -1,6 +1,5 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-// import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
@@ -49,7 +48,7 @@ export const CourseProgress = () => {
         flexDirection: "column",
       }}
     >
-      <h1 style={{ display: "flex", justifyContent: "center", color: "white" }}>
+      <h1 style={{fontSize: "60px", display: "flex", justifyContent: "center", color: "white"  }}>
         Course Progress
       </h1>
       <div
@@ -61,15 +60,15 @@ export const CourseProgress = () => {
       >
         {Object.keys(questions).map((i) => {
           return (
-            <Card style={{ margin: "25px" }}>
+            <Card style={{ margin: "40px" }}>
               <CardContent
                 style={{
-                  margin: "25px",
+                  margin: "5px",
                   padding: "10px",
                   justifyContent: "space-around",
                 }}
               >
-                <Typography gutterBottom variant="h2" component="div">
+                <Typography gutterBottom variant="h2" component="div" style={{ borderBottom: " solid 2px #ff216e", width: "190px"}} >
                   Week {i}
                 </Typography>
                 <div
@@ -80,12 +79,12 @@ export const CourseProgress = () => {
                 >
                   {Object.keys(questions[i as any]).map((j) => {
                     return (
-                      <div style={{ margin: "50px" }}>
+                      <div style={{ margin: "50px", border: "solid 6px #ff216e", borderRadius: "8px", padding: "22px", width: "300px"}}>
                         <Typography
                           gutterBottom
                           variant="h3"
                           component="div"
-                          style={{ marginTop: "30px" }}
+                          style={{ marginTop: "10px" }}
                         >
                           Day {j}
                         </Typography>
