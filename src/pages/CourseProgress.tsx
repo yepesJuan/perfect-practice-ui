@@ -48,7 +48,14 @@ export const CourseProgress = () => {
         flexDirection: "column",
       }}
     >
-      <h1 style={{fontSize: "60px", display: "flex", justifyContent: "center", color: "white"  }}>
+      <h1
+        style={{
+          fontSize: "60px",
+          display: "flex",
+          justifyContent: "center",
+          color: "white",
+        }}
+      >
         Course Progress
       </h1>
       <div
@@ -68,7 +75,12 @@ export const CourseProgress = () => {
                   justifyContent: "space-around",
                 }}
               >
-                <Typography gutterBottom variant="h2" component="div" style={{ borderBottom: " solid 2px #ff216e", width: "190px"}} >
+                <Typography
+                  gutterBottom
+                  variant="h2"
+                  component="div"
+                  style={{ borderBottom: " solid 2px #ff216e", width: "190px" }}
+                >
                   Week {i}
                 </Typography>
                 <div
@@ -79,7 +91,15 @@ export const CourseProgress = () => {
                 >
                   {Object.keys(questions[i as any]).map((j) => {
                     return (
-                      <div style={{ margin: "50px", border: "solid 6px #ff216e", borderRadius: "8px", padding: "22px", width: "300px"}}>
+                      <div
+                        style={{
+                          margin: "50px",
+                          border: "solid 6px #ff216e",
+                          borderRadius: "8px",
+                          padding: "22px",
+                          width: "300px",
+                        }}
+                      >
                         <Typography
                           gutterBottom
                           variant="h3"
